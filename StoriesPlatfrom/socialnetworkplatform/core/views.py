@@ -1,21 +1,30 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
-
+from .forms import RegistrationForm
+from django.contrib.auth import login,logout, authenticate
 # Create your views here.
 
 
-def index(request):
-    return render(request, 'signin.html')
+def home(request):
+    return render(request, 'home.html')
+
+
+
+
 
 
 #This function is for signup
 def signup(request):
     if request.method == 'POST':
-        variablelist = [request.POST.get('Name Surname', False), request.POST['username'], request.POST['E-Mail address'],
-                        request.POST['Password']]
-
-        print(variablelist)
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            # Add profileCreation
+            return redirect('')
+        else:
+            print("Form is not valid!")
     else:
-        return render(request, 'signup.html')
+        form = RegistrationForm()
 
+    return render(request, 'registration/sign_up.html', {"form": form})
