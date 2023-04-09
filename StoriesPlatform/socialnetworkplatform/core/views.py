@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from .forms import RegistrationForm, PostForm, EditProfileForm
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
-
+from .models import Profile
+from .util import CreateProfile
 
 # Create your views here.
 
@@ -18,6 +19,7 @@ def signup(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            CreateProfile(user).save()
             login(request, user)
             # Add profileCreation
             return redirect('home')
@@ -36,7 +38,6 @@ def create_post(request):
         if form.is_valid():
             story = form.save(commit=False)
             story.author = request.user
-            print(story.placeID)
             story.save()
             return redirect('home')
         else:
@@ -48,6 +49,15 @@ def create_post(request):
 
 
 def edit_profile(request, slug):
-    print(slug)
-    form = EditProfileForm()
+    profile = Profile.objects.get(Username=slug)
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST)
+        if form.is_valid():
+            new_profile = form.save(commit=False)
+            new_profile.user_id = profile.user_id
+            new_profile.id = profile.id
+            new_profile.save()
+            return redirect('home')
+    else:
+        form = EditProfileForm(instance=profile)
     return render(request, 'profile/edit_profile.html', {"form": form})

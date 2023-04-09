@@ -8,7 +8,7 @@ User = get_user_model()
 # This is the first class created according to the UML Class Diagram given in Wiki
 # Some of the fields to be added in the future
 class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     Username = models.CharField(default=0, max_length=200)

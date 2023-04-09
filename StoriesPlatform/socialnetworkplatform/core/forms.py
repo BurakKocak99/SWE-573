@@ -41,6 +41,7 @@ class PostForm(forms.ModelForm):
 
 
 class EditProfileForm(forms.ModelForm):
+    Biography = forms.CharField(widget=forms.Textarea())
     class Meta:
         model = Profile
-        fields = ["first_name","last_name", "Username", "email", "Biography"]
+        fields = ["first_name", "last_name", "Username", "email", "Biography"]
