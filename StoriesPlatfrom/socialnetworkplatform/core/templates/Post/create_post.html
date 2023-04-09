@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block title %}Post a Story{%endblock%}
+{%load crispy_forms_tags%}
+{%block content %}
+<p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Post a Story!</p>
+<form method="POST">
+    {%csrf_token%}{{form|crispy}}
+    <p>
+    </p>
+    <div id="map" style="width: 550px; height: 420px; margin:0 auto; padding:10;"></div>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6l9Uq5ACUdRqgZRCwIvaPEv3_QydAFvE&callback=initMap&libraries=places&v=weekly"
+      defer
+    ></script>
+     <p>
+    </p>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <button class="btn btn-success btn-lg" type="submit">Post</button>
+    </div>
+
+    <p><br></p>
+
+</form>
+{%endblock%}
