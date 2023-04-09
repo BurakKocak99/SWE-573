@@ -57,12 +57,10 @@ function geocode(request) {
     .geocode(request)
     .then((result) => {
       const { results } = result;
-      console.log(results[0]);
       map.setCenter(results[0].geometry.location);
       marker.setPosition(results[0].geometry.location);
       marker.setMap(map);
       document.getElementById("placeID").value = results[0].place_id;
-      console.log(document.getElementById("placeID").value);
       return results;
     })
     .catch((e) => {

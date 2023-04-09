@@ -9,10 +9,10 @@ User = get_user_model()
 # Some of the fields to be added in the future
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    Name_Surname = models.TextField()
-    Username = models.TextField()
-    emailaddress = models.EmailField(max_length=40, blank=False, default='email@email.com')
-    Password = models.CharField(max_length=15, blank=False, default='password')
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    Username = models.CharField(default=0, max_length=200)
+    email = models.EmailField(max_length=100, blank=False)
     Biography = models.TextField()
 
     def __str__(self):
@@ -29,3 +29,12 @@ class Story(models.Model):
 
     def __str__(self):
         return self.title + "\n" + self.story
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    to_Story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    comment = models.CharField(max_length=200, blank=False)
+
+
+    def __str__(self):
+        return self.comment + self.to_Story
