@@ -3,8 +3,9 @@ from .forms import RegistrationForm, PostForm, EditProfileForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
-from .models import Profile
+from .models import Profile, Story, Comment
 from .util import CreateProfile
+
 
 # Create your views here.
 
@@ -48,6 +49,7 @@ def create_post(request):
     return render(request, 'Post/create_post.html', {"form": form})
 
 
+@login_required(login_url='/login')
 def edit_profile(request, slug):
     profile = Profile.objects.get(Username=slug)
     if request.method == 'POST':
@@ -61,3 +63,16 @@ def edit_profile(request, slug):
     else:
         form = EditProfileForm(instance=profile)
     return render(request, 'profile/edit_profile.html', {"form": form})
+
+
+@login_required(login_url='/login')
+def viewprofile(request, slug):
+    stories = Story.objects.all().filter(author_id=request.user)
+    context = {
+        'stories': stories,
+        'username': slug,
+        'follower': 33, # to be added dynamically later
+        'following': 40, # to be added dynamically later
+    }
+    return render(request, 'profile/view_profile.html', context=context)
+
