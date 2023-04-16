@@ -3,6 +3,8 @@
 {%block title%}Profile Page{%endblock%}
 {%block header%}
 <link rel="stylesheet" type="text/css" href="{% static 'css/profileStyle.css' %}"/>
+<script type="module" src="{% static 'js/follow_unfollow.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 {%endblock%}
 
 {%block content%}
@@ -14,15 +16,23 @@
                 <h2 class="h3">{{username}}</h2>
             </div>
             <div class="profile-cover__action bg--img" data-overlay="0.3">
-                <button class="btn btn-rounded btn-info">
-                    <i class="fa fa-plus"></i>
-                    <span>Follow</span>
+                {%if isMe == True%}
+                <a class="btn btn-rounded btn-info" href="{%url 'edit_profile' username%}">
+                    <span>EditProfile</span>
+                </a>
+                {%else%}
+                <button class="btn btn-rounded {{follow_button}}" data-url="{% url 'follow' username%}"
+                        id="follow_button"
+                        data-action={{follow_action}} username={{username}}>
+                    <i class="fa {{follow_icon}}" id="follow-tag"></i>
+                    <span class="js-follow-text">{{follow_text}}</span>
                 </button>
+                {%endif%}
             </div>
             <div class="profile-cover__info">
                 <ul class="nav">
-                    <li><strong>{{follower}}</strong>Followers</li>
-                    <li><strong>{{following}}</strong>Following</li>
+                    <li><strong id="followerNumber">{{follower}}</strong>Followers</li>
+                    <li><strong id="followingNumber">{{following}}</strong>Following</li>
                 </ul>
             </div>
         </div>
@@ -51,7 +61,7 @@
                             </div>
                         </div>
                     </li>
-                {% endfor %}
+                    {% endfor %}
                 </ul>
             </div>
         </div>
@@ -59,5 +69,6 @@
 </div>
 
 {%endblock%}
+
 
 

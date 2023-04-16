@@ -1,8 +1,9 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import User
-from .models import Story,Profile
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from .models import Story, Profile, CustomUser
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -16,7 +17,7 @@ class RegistrationForm(UserCreationForm):
     ))
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ["first_name", "last_name", "username", "email", "password1", "password2"]
 
 
@@ -35,6 +36,7 @@ class PostForm(forms.ModelForm):
         }
 
     ))
+
     class Meta:
         model = Story
         fields = ["title", "story", "time", "placeID"]
@@ -42,6 +44,18 @@ class PostForm(forms.ModelForm):
 
 class EditProfileForm(forms.ModelForm):
     Biography = forms.CharField(widget=forms.Textarea())
+
     class Meta:
         model = Profile
         fields = ["first_name", "last_name", "Username", "email", "Biography"]
+
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = ("username",)
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = ("username",)
