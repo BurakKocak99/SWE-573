@@ -10,4 +10,5 @@ urlpatterns = [
     path('editprofile/', views.edit_profile, name='edit_profile'),
     path('viewprofile/<slug:slug>/', views.viewprofile, name='viewprofile'),
     path('follow/<slug:slug>',  views.FollowToggle.as_view(), name='follow'),
+    path('followers/<slug:slug>', views.follower_page, name= 'followers'),
 ]

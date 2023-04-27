@@ -1,0 +1,28 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block title %}Followers{%endblock%}
+{%block header%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/profileStyle.css' %}"/>
+
+{%endblock%}
+
+{%block content %}
+<div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Followers</h3>
+            </div>
+              <ul class="panel-activity__list">
+                    <li>
+                        <div class="card">
+
+                          <div class="card-body">
+                            <p class="card-text">Special title treatment</p><div class="text-end">
+                            <a href="#" class="btn btn-primary">Go somewhere</a></div>
+                          </div>
+                        </div>
+                    </li>
+              </ul>
+</div>
+
+
+{%endblock%}

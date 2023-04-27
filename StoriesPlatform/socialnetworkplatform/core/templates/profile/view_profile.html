@@ -16,8 +16,8 @@
                 <h2 class="h3">{{username}}</h2>
             </div>
             <div class="profile-cover__action bg--img" data-overlay="0.3">
-                {%if isMe == True%}
-                <a class="btn btn-rounded btn-info" href="{%url 'edit_profile' username%}">
+                {%if is_me == True%}
+                <a class="btn btn-rounded btn-info" href="{%url 'edit_profile'%}">
                     <span>EditProfile</span>
                 </a>
                 {%else%}
@@ -31,10 +31,24 @@
             </div>
             <div class="profile-cover__info">
                 <ul class="nav">
-                    <li><strong id="followerNumber">{{follower}}</strong>Followers</li>
-                    <li><strong id="followingNumber">{{following}}</strong>Following</li>
+                    <li>
+                        <strong id="followerNumber"> <a href="#" style="text-decoration:none">{{follower}}</a></strong>
+                        Followers
+                    </li>
+                    <li>
+                        <strong id="followingNumber"><a href="#" style="text-decoration:none">{{following}}</a></strong>
+                        Following
+                    </li>
                 </ul>
             </div>
+        </div>
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">About Me</h3>
+            </div>
+             <div class="panel-content panel-activity">
+                         <p>{{about_me}}</p>
+             </div>
         </div>
         <div class="panel">
             <div class="panel-heading">

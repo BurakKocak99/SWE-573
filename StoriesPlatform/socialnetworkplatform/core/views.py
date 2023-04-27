@@ -74,32 +74,33 @@ def edit_profile(request):
 def viewprofile(request, slug):
     requested_user = User.objects.get(username=slug)
     stories = Story.objects.all().filter(author_id=requested_user)
-    is_me = isCurrentUser(requested_user.username, slug)
+    is_me = isCurrentUser(request.user.username, slug)
     following = is_following(request.user, requested_user)
     follow_context = getFollowNumbers(requested_user)
-    print(follow_context)
+    about_me = Profile.objects.get(user_id=requested_user).Biography
     context = {
         'stories': stories,
         'username': slug,
         'is_me': is_me,
         'follower': follow_context[0],
         'following': follow_context[1],
+        'about_me': about_me,
     }
-
-    if not following:
-        context.update({
-            'follow_text': "Follow",
-            'follow_action': "follow",
-            'follow_icon': "fa-plus",
-            'follow_button': "btn-info",
-        })
-    else:
-        context.update({
-            'follow_text': "Unfollow",
-            'follow_action': "unfollow",
-            'follow_icon': "fa-minus",
-            'follow_button': "btn-danger"
-        })
+    if not is_me:
+        if not following:
+            context.update({
+                'follow_text': "Follow",
+                'follow_action': "follow",
+                'follow_icon': "fa-plus",
+                'follow_button': "btn-info",
+            })
+        else:
+            context.update({
+                'follow_text': "Unfollow",
+                'follow_action': "unfollow",
+                'follow_icon': "fa-minus",
+                'follow_button': "btn-danger"
+            })
 
     return render(request, 'profile/view_profile.html', context=context)
 
@@ -116,11 +117,12 @@ class FollowToggle(LoginRequiredMixin, View):
             ... more to be added if needed
         }
     Returns:
-          Json
+          JsonResponse
           {
             done: successful or not
             wording: Wording for buttons used for follow/unfollow actions
             action: to change the state of the action on html page in button class
+            follower: to dynamically change the number of followers in HTML
             ... more to be added if needed
           }
     """
@@ -169,6 +171,9 @@ class FollowToggle(LoginRequiredMixin, View):
                 'follower': getFollower(requested_user)
             }
         )
+
+def follower_page(request, slug):
+    return render(request, 'profile/follower.html')
 
 
 def testJQ(request):

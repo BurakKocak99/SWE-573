@@ -30,6 +30,7 @@ def is_following(user1, user2):
 
 # This function checks if the current user is the viewing user or not: currentUser == Viewinguser ?
 def isCurrentUser(currentUser, viewingUser):
+    print(currentUser, viewingUser)
     if currentUser == viewingUser:
         return True
     else:
