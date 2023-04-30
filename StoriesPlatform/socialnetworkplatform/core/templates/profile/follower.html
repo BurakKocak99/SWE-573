@@ -1,28 +1,111 @@
 {%extends 'base.html'%}
 {%load static%}
-{%block title %}Followers{%endblock%}
+{% load template_filters %}
+{%block title %}{{request.user.username}}'s Network{%endblock%}
 {%block header%}
 <link rel="stylesheet" type="text/css" href="{% static 'css/profileStyle.css' %}"/>
-
+<link rel="stylesheet" type="text/css" href="{% static 'css/followers_style.css' %}"/>
+<script type="module" src="{% static 'js/followerpage.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 {%endblock%}
 
 {%block content %}
-<div class="panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">Followers</h3>
-            </div>
-              <ul class="panel-activity__list">
-                    <li>
-                        <div class="card">
-
-                          <div class="card-body">
-                            <p class="card-text">Special title treatment</p><div class="text-end">
-                            <a href="#" class="btn btn-primary">Go somewhere</a></div>
-                          </div>
-                        </div>
+<div class="container">
+    <div class="profile">
+        <div class="profile-header">
+            <div class="profile-header-cover"></div>
+            <div class="profile-header-content">
+                <ul class="profile-header-tab nav nav-tabs nav-tabs-v2">
+                    <li class="nav-item">
+                        <a href="#profile-followers" class="nav-link active" data-bs-toggle="tab">
+                            <div class="nav-field">Followers</div>
+                            <div class="nav-value">{{follower_number}}</div>
+                        </a>
                     </li>
-              </ul>
+                    <li class="nav-item">
+                        <a href="#profile-following" class="nav-link" data-bs-toggle="tab">
+                            <div class="nav-field">Following</div>
+                            <div class="nav-value">{{following_number}}</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <div class="desktop-sticky-top">
+                    <h4>{{request.user.first_name}} {{request.user.last_name}}</h4>
+                    <div class="font-weight-600 mb-3 text-muted mt-n2">@{{request.user.username}}</div>
+                    <hr class="mt-4 mb-4"/>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="tab-content p-0">
+                            <div class="tab-pane fade active show" id="profile-followers">
+                                <div class="list-group">
+                                    {%for folllowers_user in follower_list%}
+                                    <div class="list-group-item d-flex align-items-center">
+                                        <div class="flex-fill pl-3 pr-3">
+                                            <div><a href="#"
+                                                    class="text-dark font-weight-600">{{folllowers_user|lookup:"username"}}</a>
+                                            </div>
+                                            <div class="text-muted fs-13px">{{folllowers_user|lookup:"first_name"}}
+                                                {{folllowers_user|lookup:"last_name"}}
+                                            </div>
+                                        </div>
+                                        <a href="#"
+                                           class="btn  {{folllowers_user|lookup:'follow_button'}} follow_button"
+                                           data-url="{% url 'follow' folllowers_user|lookup:'username' %}"
+
+                                           data-action={{folllowers_user|lookup:"follow_action"}}
+                                           username={{folllowers_user|lookup:"username"}}>
+                                            {{folllowers_user|lookup:'follow_text'}}
+                                            </a>
+                                    </div>
+                                    {%endfor%}
+                                    <div class="text-center p-3">
+                                        <a href="#" class="text-dark text-decoration-none">Show more <b
+                                                class="caret"></b></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade passive show" id="profile-following">
+                                <div class="list-group">
+                                      {%for folllowing_user in following_list%}
+                                    <div class="list-group-item d-flex align-items-center">
+                                        <div class="flex-fill pl-3 pr-3">
+                                            <div><a href="#"
+                                                    class="text-dark font-weight-600">{{folllowing_user|lookup:"username"}}</a>
+                                            </div>
+                                            <div class="text-muted fs-13px">{{folllowing_user|lookup:"first_name"}}
+                                                {{folllowing_user|lookup:"last_name"}}
+                                            </div>
+                                        </div>
+                                        <a href="#"
+                                           class="btn  {{folllowing_user|lookup:'follow_button'}} follow_button"
+                                           data-url="{% url 'follow' folllowing_user|lookup:'username' %}"
+
+                                           data-action={{folllowing_user|lookup:"follow_action"}}
+                                           username={{folllowing_user|lookup:"username"}}>
+                                            {{folllowing_user|lookup:'follow_text'}}
+                                            </a>
+                                    </div>
+                                    {%endfor%}
+                                    <div class="text-center p-3">
+                                        <a href="#" class="text-dark text-decoration-none">Show more <b
+                                                class="caret"></b></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
 {%endblock%}

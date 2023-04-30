@@ -4,7 +4,7 @@ from .forms import RegistrationForm, PostForm, EditProfileForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .models import Profile, Story, Comment
-from .util import CreateProfile, isCurrentUser, is_following, getFollowNumbers, getFollower, getFollowing
+from .util import CreateProfile, isCurrentUser, is_following, getFollowNumbers, getFollower_count, getFollowing_count,get_follower_following_info
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
@@ -130,7 +130,6 @@ class FollowToggle(LoginRequiredMixin, View):
     @staticmethod
     def post(request, *args, **kwargs):
         data = request.POST.dict()
-        print(data)
         # Check if the necessary fields exists in the data if not return Bad Request
         if "action" not in data or "username" not in data and request.user.username != data['username']:
             return HttpResponseBadRequest("Action and Username must be present!")
@@ -168,14 +167,22 @@ class FollowToggle(LoginRequiredMixin, View):
                 'done': True,
                 'wording': "Unfollow" if data['action'] == "follow" else "Follow",
                 'action': 'unfollow' if data['action'] == "follow" else "follow",
-                'follower': getFollower(requested_user)
+                'follower': getFollower_count(requested_user)
             }
         )
 
+
 def follower_page(request, slug):
-    return render(request, 'profile/follower.html')
+    requested_user = User.objects.get(username=slug)
+    follow_context = getFollowNumbers(requested_user)
+    is_me = isCurrentUser(request.user.username, slug)
+    following_list, follower_list = get_follower_following_info(requested_user, request.user, is_me)
+    context = {
+        'follower_number': follow_context[0],
+        'following_number': follow_context[1],
+        'follower_list': follower_list,
+        'following_list': following_list,
+    }
 
+    return render(request, 'profile/follower.html', context=context)
 
-def testJQ(request):
-    print(getFollowNumbers(request.user))
-    return render(request, 'test_temp.html')

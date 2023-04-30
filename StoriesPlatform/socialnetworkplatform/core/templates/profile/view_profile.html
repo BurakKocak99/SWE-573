@@ -32,11 +32,12 @@
             <div class="profile-cover__info">
                 <ul class="nav">
                     <li>
-                        <strong id="followerNumber"> <a href="#" style="text-decoration:none">{{follower}}</a></strong>
+                        <strong id="followerNumber">
+                            <a href="{% url 'network' username%}" style="text-decoration:none">{{follower}}</a></strong>
                         Followers
                     </li>
                     <li>
-                        <strong id="followingNumber"><a href="#" style="text-decoration:none">{{following}}</a></strong>
+                        <strong id="followingNumber"><a href="{% url 'network' username%}" style="text-decoration:none">{{following}}</a></strong>
                         Following
                     </li>
                 </ul>

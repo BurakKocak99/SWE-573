@@ -1,7 +1,7 @@
 
-
 function follow_unfollow(){
-    const action = $(this).attr("data-action")
+    const action = $(this).attr("data-action");
+    console.log('Hello!');
     $.ajax({
         type: 'POST',
         url: $(this).attr("data-url"),
@@ -18,15 +18,15 @@ function follow_unfollow(){
             if (action == 'follow'){
                 //change to unfollow
                 $(this).attr("data-action", data.action);
-                $(".js-follow-text").text(data.wording);
+                $(this).text(data.wording);
                 $(this).removeClass("btn-info").addClass("btn-danger");
                 $("#follow-tag").removeClass("fa-plus").addClass("fa-minus");
             }
             else{
                 //change action to follow
                 $(this).attr("data-action", data.action);
-                $(".js-follow-text").text(data.wording);
-                $(this).removeClass("btn-danger").addClass("btn-info");
+                $(this).text(data.wording);
+                $(this).removeClass("btn-danger").addClass("btn-outline-primary");
                 $("#follow-tag").removeClass("fa-minus").addClass("fa-plus");
             }
         },
@@ -52,8 +52,7 @@ function getCSRFTokenValue(name) {
     return cookieValue;
 }
 window.setTimeout(() => {
-    const follow_button = document.getElementById("follow_button");
-    follow_button.addEventListener("click",follow_unfollow,false);
+    $(document).on("click", '.follow_button',follow_unfollow);
 
 }, 10);
 

@@ -5,7 +5,7 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):
-    following = models.ManyToManyField(
+    following = models.ManyToManyField( #who is following this user
         "self", blank=True, symmetrical=False
     )
 
