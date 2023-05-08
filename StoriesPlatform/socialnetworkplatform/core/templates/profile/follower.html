@@ -11,6 +11,7 @@
 
 {%block content %}
 <div class="container">
+    {%csrf_token%}
     <div class="profile">
         <div class="profile-header">
             <div class="profile-header-cover"></div>
@@ -35,8 +36,8 @@
         <div class="profile-container">
             <div class="profile-sidebar">
                 <div class="desktop-sticky-top">
-                    <h4>{{request.user.first_name}} {{request.user.last_name}}</h4>
-                    <div class="font-weight-600 mb-3 text-muted mt-n2">@{{request.user.username}}</div>
+                    <h4>{{viewed_user.first_name}} {{viewed_user.last_name}}</h4>
+                    <div class="font-weight-600 mb-3 text-muted mt-n2">@{{viewed_user.username}}</div>
                     <hr class="mt-4 mb-4"/>
                 </div>
             </div>
@@ -50,8 +51,8 @@
                                     {%for folllowers_user in follower_list%}
                                     <div class="list-group-item d-flex align-items-center">
                                         <div class="flex-fill pl-3 pr-3">
-                                            <div><a href="#"
-                                                    class="text-dark font-weight-600">{{folllowers_user|lookup:"username"}}</a>
+                                            <div><a class="text-dark font-weight-600"
+                                                    href="{%url 'viewprofile' folllowers_user|lookup:'username' %}">{{folllowers_user|lookup:"username"}}</a>
                                             </div>
                                             <div class="text-muted fs-13px">{{folllowers_user|lookup:"first_name"}}
                                                 {{folllowers_user|lookup:"last_name"}}
@@ -78,7 +79,7 @@
                                       {%for folllowing_user in following_list%}
                                     <div class="list-group-item d-flex align-items-center">
                                         <div class="flex-fill pl-3 pr-3">
-                                            <div><a href="#"
+                                            <div><a href="{%url 'viewprofile' folllowing_user|lookup:'username' %}"
                                                     class="text-dark font-weight-600">{{folllowing_user|lookup:"username"}}</a>
                                             </div>
                                             <div class="text-muted fs-13px">{{folllowing_user|lookup:"first_name"}}

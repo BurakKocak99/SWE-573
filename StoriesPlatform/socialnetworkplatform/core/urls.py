@@ -10,5 +10,9 @@ urlpatterns = [
     path('editprofile/', views.edit_profile, name='edit_profile'),
     path('viewprofile/<slug:slug>/', views.viewprofile, name='viewprofile'),
     path('follow/<slug:slug>',  views.FollowToggle.as_view(), name='follow'),
-    path('network/<slug:slug>', views.follower_page, name= 'network'),
+    path('network/<slug:slug>', views.follower_page, name='network'),
+    path('viewpost/<int:story_id>', views.viewPost, name='viewpost'),
+    path('like', views.LikeToggle.as_view(), name='like'),
+    path('comment', views.Comment_action.as_view(), name='comment')
+
 ]

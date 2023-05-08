@@ -1,0 +1,29 @@
+body {
+    background-color: #eee;
+    
+}
+
+.comments {
+  text-decoration: underline;
+  text-underline-position: under;
+  cursor: pointer;
+  margin-right: 1em;
+}
+
+#story_title {
+   text-alignment: center;
+}
+
+.time_spacing {
+    margin-left: 15px;
+}
+
+
+#map{
+  height: 420px;
+  width: 420px;
+  margin-left: 400px;
+  padding:10px;
+
+}
+

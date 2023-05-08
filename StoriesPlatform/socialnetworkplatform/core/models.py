@@ -5,7 +5,7 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):
-    following = models.ManyToManyField( #who is following this user
+    following = models.ManyToManyField(  # who is following this user
         "self", blank=True, symmetrical=False
     )
 
@@ -44,7 +44,7 @@ class Story(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title + "\n" + self.story
+        return self.title
 
 
 class Comment(models.Model):
@@ -53,4 +53,12 @@ class Comment(models.Model):
     comment = models.CharField(max_length=200, blank=False)
 
     def __str__(self):
-        return self.comment + self.to_Story
+        return self.comment
+
+
+class Likes(models.Model):
+    liked_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    to_Story = models.ForeignKey(Story, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.liked_by.username + " liked the story: " + self.to_Story.title

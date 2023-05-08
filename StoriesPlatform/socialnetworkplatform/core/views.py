@@ -3,8 +3,10 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from .forms import RegistrationForm, PostForm, EditProfileForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from .models import Profile, Story, Comment
-from .util import CreateProfile, isCurrentUser, is_following, getFollowNumbers, getFollower_count, getFollowing_count,get_follower_following_info
+from .models import Profile, Story, Comment, Likes
+from .util import CreateProfile, isCurrentUser, is_following, getFollowNumbers, getFollower_count, getFollowing_count, \
+    get_follower_following_info, getLikeCount, getComments, createComment, validateComment, checkLiked, \
+    get_story_details
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
@@ -79,12 +81,13 @@ def viewprofile(request, slug):
     follow_context = getFollowNumbers(requested_user)
     about_me = Profile.objects.get(user_id=requested_user).Biography
     context = {
-        'stories': stories,
+        'stories':  get_story_details(stories),
         'username': slug,
         'is_me': is_me,
         'follower': follow_context[0],
         'following': follow_context[1],
         'about_me': about_me,
+
     }
     if not is_me:
         if not following:
@@ -177,12 +180,85 @@ def follower_page(request, slug):
     follow_context = getFollowNumbers(requested_user)
     is_me = isCurrentUser(request.user.username, slug)
     following_list, follower_list = get_follower_following_info(requested_user, request.user, is_me)
+    print(follower_list)
     context = {
         'follower_number': follow_context[0],
         'following_number': follow_context[1],
         'follower_list': follower_list,
         'following_list': following_list,
+        'viewed_user': requested_user,
     }
 
     return render(request, 'profile/follower.html', context=context)
 
+
+@login_required(login_url='/login')
+def viewPost(request, story_id):
+    story = Story.objects.get(id=story_id)
+    like_count = getLikeCount(story)
+    comments = getComments(story)
+    is_liked = checkLiked(story, request.user)
+    context = {
+        'story_id': story.id,
+        'placeId': story.placeID,
+        'comments': comments,
+        'viewed_user': story.author,
+        'story_title': story.title,
+        'story': story.story,
+        'likes': like_count,
+        'story_time': story.created_at,
+        'like_btn': "fa-solid" if is_liked else "fa-regular",
+    }
+
+    return render(request, 'post/viewpost.html', context=context)
+
+
+class LikeToggle(LoginRequiredMixin, View):
+    @staticmethod
+    def post(request, *args, **kwargs):
+        data = request.POST.dict()
+        story = Story.objects.get(id=data['story_id'])
+        is_liked = True if checkLiked(story, request.user) else False
+        if request.user.username != story.author.username:
+            if not is_liked:  # Like action
+                Likes(liked_by=request.user, to_Story=story).save()
+                return JsonResponse({
+                    'done': True,
+                    'like_count': getLikeCount(story),
+                    'old_button': 'fa-regular',
+                    'new_button': 'fa-solid',
+                    'Return Message': "Like Action is Done!",
+                })
+
+            else:  # Unlike Action
+                Likes.objects.get(liked_by=request.user, to_Story=story).delete()
+                return JsonResponse({
+                    'done': True,
+                    'like_count': getLikeCount(story),
+                    'old_button': 'fa-solid',
+                    'new_button': 'fa-regular',
+                    'Return Message': "Unlike Action is Done!",
+                })
+
+        return JsonResponse({
+            'done': False,
+            'Error Message': "Users cannot Like their own stories",
+        })
+
+
+class Comment_action(LoginRequiredMixin, View):
+    @staticmethod
+    def post(request, *args, **kwargs):
+        data = request.POST.dict()
+        if not validateComment(data['current_username'], data['story_id']):
+            return JsonResponse({
+                'done': False,
+                'errorMessage': "User name or story do not exist!"
+            })
+
+        createComment(data['comment'], data['current_username'], data['story_id']).save()
+
+        return JsonResponse(
+            {
+                'done': True,
+            })

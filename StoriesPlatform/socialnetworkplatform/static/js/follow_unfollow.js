@@ -1,4 +1,4 @@
-
+const csrftoken= document.getElementsByName("csrfmiddlewaretoken")[0].value;
 
 function follow_unfollow(){
     const action = $(this).attr("data-action")
@@ -6,7 +6,7 @@ function follow_unfollow(){
         type: 'POST',
         url: $(this).attr("data-url"),
         headers:{
-            "X-CSRFToken": getCSRFTokenValue('csrftoken'),
+            "X-CSRFToken": csrftoken,
         },
         data: {
             action: action,
@@ -36,22 +36,9 @@ function follow_unfollow(){
         }
     );
 }
-function getCSRFTokenValue(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+
 window.setTimeout(() => {
+
     const follow_button = document.getElementById("follow_button");
     follow_button.addEventListener("click",follow_unfollow,false);
 
