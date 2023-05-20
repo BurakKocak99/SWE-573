@@ -13,6 +13,7 @@ urlpatterns = [
     path('network/<slug:slug>', views.follower_page, name='network'),
     path('viewpost/<int:story_id>', views.viewPost, name='viewpost'),
     path('like', views.LikeToggle.as_view(), name='like'),
-    path('comment', views.Comment_action.as_view(), name='comment')
+    path('comment', views.Comment_action.as_view(), name='comment'),
+    path('feed', views.News_Feed.as_view(), name='feed'),
 
 ]

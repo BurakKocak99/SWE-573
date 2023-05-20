@@ -96,23 +96,7 @@ body{
     }
 }
 
-@media (max-width: 600px) {
-    .profile-cover__info .nav {
-        display: block;
-        margin: 90px auto 0;
-        padding-left: 30px;
-        padding-right: 30px;
-    }
 
-    .profile-cover__info .nav li:not(:first-child) {
-        margin-top: 8px;
-        margin-left: 0;
-        padding-top: 18px;
-        padding-left: 0;
-        border-top: 1px solid #eee;
-        border-left-width: 0;
-    }
-}
 
 .panel {
     margin-bottom: 30px;
@@ -412,9 +396,10 @@ button.btn-link {
     position: relative;
     min-height: 35px;
     padding-top: 4px;
-    padding-left: 45px;
+    padding-left: 25px;
     color: #999;
     z-index: 0;
+    font-size: large;
 }
 
 .activity__list__body {
@@ -473,13 +458,6 @@ ul:last-child {
     font-weight: 900;
 }
 
-.activity__list__header img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    max-width: 35px;
-    border-radius: 50%;
-}
 
 .activity__list__header a {
     color: #222;

@@ -1,8 +1,59 @@
 {%extends 'base.html'%}
+{%load static%}
+{%block title%}Profile Page{%endblock%}
+{%block header%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/profileStyle.css' %}"/>
+<script type="module" src="{% static 'js/home_page.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+{%endblock%}
 
-{%block title %}Log In{%endblock%}
-{%load crispy_forms_tags%}
-{%block content %}
-<p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Home</p>
+{%block content%}
+
+<div class="container">
+    {%csrf_token%}
+    <div class="col-lg-8">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Stories Posted</h3>
+            </div>
+            <div class="panel-content panel-activity">
+                <ul class="panel-activity__list" id="stories">
+
+                    {%for story in stories%}
+                    <li>
+                        <div>
+
+                            <div class="activity__list__header">
+                                <a href="{%url 'viewprofile' story.0.author%}">{{story.0.author}}</a>
+                            </div>
+                             <a href="{%url 'viewpost' story.0.id%}"
+                                style="text-decoration:none" class=" text-dark font-weight-600">
+                            <h2 class="text-center">{{story.0.title}}</h2>
+                            <div class="activity__list__body entry-content">
+
+                                    <p class="longtext">
+                                        {{story.0.story}}
+                                    </p>
+
+                            </div>
+                             </a>
+                            <div class="activity__list__footer">
+                                <a href="{%url 'viewpost' story.0.id%}" style="text-decoration:none"> <i class="fa fa-thumbs-up"></i>{{story.2}}</a>
+                                <a href="{%url 'viewpost' story.0.id%}" style="text-decoration:none"> <i class="fa fa-comments"></i>{{story.1}}</a>
+                                <span> <i class="fa fa-clock"></i>{{story.0.created_at}}</span>
+                            </div>
+
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
 {%endblock%}
+
+
+

@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from .models import Profile, Likes, Comment, Story
 from django.db.models import Count
+from django.core import serializers
+import json
 
 User = get_user_model()
 
@@ -148,6 +150,18 @@ def checkLiked(story, user):
 def get_story_details(stories):
     stories_list = list()
     for story in stories:
-        stories_list.append([story, getComments(story).count(), getLikeCount(story)])  # Each element contains a story object, Number of comments and likes
-    print(stories_list)
+        stories_list.append([story, getComments(story).count(),
+                             getLikeCount(story)])  # Each element contains a story object, Number of comments and likes
+
     return stories_list
+
+
+def get_story_list(user_id, story_count=0):
+    stories = Story.objects.all().exclude(author=user_id)
+
+    return stories.order_by('-created_at')[int(story_count): int(story_count) + 4]
+
+
+def stories_to_list(story):
+    time_serialize = json.loads(serializers.serialize("json", Story.objects.filter(id=story.id)))
+    return [story.id, story.author.username, story.title, story.story, time_serialize[0]['fields']['time']]

@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect, resolve_url
 from django.http import JsonResponse, HttpResponseBadRequest
 from .forms import RegistrationForm, PostForm, EditProfileForm
@@ -6,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile, Story, Comment, Likes
 from .util import CreateProfile, isCurrentUser, is_following, getFollowNumbers, getFollower_count, getFollowing_count, \
     get_follower_following_info, getLikeCount, getComments, createComment, validateComment, checkLiked, \
-    get_story_details
+    get_story_details, get_story_list, stories_to_list
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
@@ -18,7 +19,12 @@ User = get_user_model()
 
 @login_required(login_url="/login")
 def home(request):
-    return render(request, 'home.html')
+    stories = get_story_list(request.user.id)
+
+    context = {
+        'stories': get_story_details(stories),
+    }
+    return render(request, 'home.html', context=context)
 
 
 # This function is for signup
@@ -81,7 +87,7 @@ def viewprofile(request, slug):
     follow_context = getFollowNumbers(requested_user)
     about_me = Profile.objects.get(user_id=requested_user).Biography
     context = {
-        'stories':  get_story_details(stories),
+        'stories': get_story_details(stories),
         'username': slug,
         'is_me': is_me,
         'follower': follow_context[0],
@@ -262,3 +268,19 @@ class Comment_action(LoginRequiredMixin, View):
             {
                 'done': True,
             })
+
+
+class News_Feed(LoginRequiredMixin, View):
+    @staticmethod
+    def get(request, *args, **kwargs):
+
+        num_elements = request.headers['num-elements']
+        stories = get_story_details(get_story_list(request.user.id, num_elements))
+
+        for i in range(stories.__len__()):
+            stories[i][:1] = stories_to_list(stories[i][0])
+
+        return JsonResponse({
+            'done': True,
+            "content": json.dumps(stories),
+        })
