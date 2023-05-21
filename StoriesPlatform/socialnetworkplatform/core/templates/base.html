@@ -41,7 +41,6 @@
         <li class="nav-item">
           <a class="nav-link" href="{%url 'viewprofile' request.user.username %}">Profile</a>
         </li>
-
         </li>
       </ul>
     </div>
@@ -49,7 +48,7 @@
               <a class="nav-link disabled" class=" text-dark font-weight-600"
                  style="text-decoration:none; color:AntiqueWhite">{{request.user.username}}</a>
              <button type="button" class="btn btn-link px-3 me-2">
-                 <a href="#"  class=" text-dark font-weight-600"> Log out </a>
+                 <a href="{%url 'logout'%}"  class=" text-dark font-weight-600"> Log out </a>
         </button>
 
       </div>
@@ -57,12 +56,9 @@
 </nav>
 
 <div class="container">
-
      <br>
     <br>
     {% block content %} {% endblock %}
-
-
 </div>
 
 

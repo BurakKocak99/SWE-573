@@ -43,7 +43,7 @@ class PostForm(forms.ModelForm):
 
 
 class EditProfileForm(forms.ModelForm):
-    Biography = forms.CharField(widget=forms.Textarea())
+    Biography = forms.CharField(widget=forms.Textarea(), required=False)
 
     class Meta:
         model = Profile

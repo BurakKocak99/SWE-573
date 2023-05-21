@@ -4,10 +4,10 @@ function initMap() {
     zoom: 8,
     center: { lat: 40.72, lng: -73.96 },
   });
- // const geocoder = new google.maps.Geocoder();
-  //const infowindow = new google.maps.InfoWindow();
+  const geocoder = new google.maps.Geocoder();
+  const infowindow = new google.maps.InfoWindow();
 
-   //geocodePlaceId(geocoder, map, infowindow);
+  geocodePlaceId(geocoder, map, infowindow);
 
 }
 

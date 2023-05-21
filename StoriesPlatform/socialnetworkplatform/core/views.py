@@ -180,7 +180,7 @@ class FollowToggle(LoginRequiredMixin, View):
             }
         )
 
-
+@login_required(login_url='/login')
 def follower_page(request, slug):
     requested_user = User.objects.get(username=slug)
     follow_context = getFollowNumbers(requested_user)
