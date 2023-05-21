@@ -1,0 +1,18 @@
+# Git
+.git
+.gitignore
+
+# Docker
+.docker
+
+# Python
+StoriesPlatform/__pycache__/
+StoriesPlatform/*/__pycache__/
+StoriesPlatform/*/*/__pycache__/
+StoriesPlatform/*/*/*/__pycache__/
+.env/
+.venv/
+venv/
+
+# Local PostgreSQL data
+data/

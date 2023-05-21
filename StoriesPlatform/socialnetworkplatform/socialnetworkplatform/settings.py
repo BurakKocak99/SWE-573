@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-4#h(53g^l%@rngn*=%o)k83jk$6-q7*j%$_k5x8-15g10zs39-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -85,6 +85,7 @@ WSGI_APPLICATION = 'socialnetworkplatform.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'db',
         'NAME': 'DjangoDB',
         'USER': 'DjangoDBuser',
         'PASSWORD': '112358'
