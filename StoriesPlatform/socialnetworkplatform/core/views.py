@@ -216,7 +216,7 @@ def viewPost(request, story_id):
         'like_btn': "fa-solid" if is_liked else "fa-regular",
     }
 
-    return render(request, 'post/viewpost.html', context=context)
+    return render(request, 'Post/viewpost.html', context=context)
 
 
 class LikeToggle(LoginRequiredMixin, View):
